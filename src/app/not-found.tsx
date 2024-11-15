@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { urls } from "@/lib/urls";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -21,7 +22,7 @@ const NotFound = () => {
           Sorry, it seems like the page you are looking for does not exist.
         </p>
         <Button className="mt-8 text-lg">
-          <Link href="/" className="flex gap-x-2 items-center">
+          <Link href={urls.LANDING_PAGE} className="flex gap-x-2 items-center">
             <span>Go Back Home</span>
             <FaArrowRightLong />
           </Link>

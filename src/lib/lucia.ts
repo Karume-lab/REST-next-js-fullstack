@@ -1,10 +1,15 @@
-import { Lucia } from "lucia";
+import { Lucia, Session, User } from "lucia";
 import { PrismaAdapter } from "@lucia-auth/adapter-prisma";
 import prisma from "./prisma";
 import { cookies } from "next/headers";
+import { cache } from "react";
 
 const adapter = new PrismaAdapter(prisma.session, prisma.user);
 
+interface DatabaseUserAttributes {
+  id: string;
+  email: string | null;
+}
 export const lucia = new Lucia(adapter, {
   sessionCookie: {
     name: "agri-gear-auth-cookie",
@@ -13,47 +18,54 @@ export const lucia = new Lucia(adapter, {
       secure: process.env.NODE_ENV === "production",
     },
   },
+  getUserAttributes(databaseUserAttributes) {
+    return {
+      id: databaseUserAttributes.id,
+      email: databaseUserAttributes.email,
+    };
+  },
 });
 
-export const getUser = async () => {
-  const sessionId =
-    (await cookies()).get(lucia.sessionCookieName)?.value || null;
-
-  if (!sessionId) {
-    return null;
+declare module "lucia" {
+  interface Register {
+    Lucia: typeof lucia;
+    DatabaseUserAttributes: DatabaseUserAttributes;
   }
+}
 
-  const { user, session } = await lucia.validateSession(sessionId);
-
-  try {
-    if (session && session.fresh) {
-      const sessionCookie = await lucia.createSessionCookie(session.id);
-      (await cookies()).set(
-        sessionCookie.name,
-        sessionCookie.value,
-        sessionCookie.attributes
-      );
+export const validateRequest = cache(
+  async (): Promise<
+    { user: User; session: Session } | { user: null; session: null }
+  > => {
+    const sessionId = cookies().get(lucia.sessionCookieName)?.value ?? null;
+    if (!sessionId) {
+      return {
+        user: null,
+        session: null,
+      };
     }
 
-    if (!session) {
-      const sessionCookie = await lucia.createBlankSessionCookie();
+    const result = await lucia.validateSession(sessionId);
 
-      (await cookies()).set(
-        sessionCookie.name,
-        sessionCookie.value,
-        sessionCookie.attributes
-      );
-    }
-  } catch (error) {}
+    try {
+      if (result.session && result.session.fresh) {
+        const sessionCookie = lucia.createSessionCookie(result.session.id);
+        cookies().set(
+          sessionCookie.name,
+          sessionCookie.value,
+          sessionCookie.attributes
+        );
+      }
+      if (!result.session) {
+        const sessionCookie = lucia.createBlankSessionCookie();
+        cookies().set(
+          sessionCookie.name,
+          sessionCookie.value,
+          sessionCookie.attributes
+        );
+      }
+    } catch {}
 
-  const dbUser = await prisma.user.findUnique({
-    where: {
-      id: user?.id,
-    },
-    select: {
-      email: true,
-    },
-  });
-
-  return dbUser;
-};
+    return result;
+  }
+);

@@ -1,18 +1,13 @@
 import React from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { SignInForm, SignUpForm } from "@/components";
-import { getUser } from "@/lib/lucia";
-import { redirect } from "next/navigation";
 import ContinueWithGoogleButton from "@/components/auth/ContinueWithGoogleButton";
 
 const SignInTabValue = "signIn";
 const SignUpTabValue = "signUp";
 
 const Auth = async () => {
-  const user = await getUser();
-  if (user) {
-    redirect("/");
-  }
+
   return (
     <>
       <ContinueWithGoogleButton />

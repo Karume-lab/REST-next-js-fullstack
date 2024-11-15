@@ -23,6 +23,7 @@ import { signUpSchema, T_SignUpSchema } from "@/lib/schemas";
 import { signUp } from "@/app/(pages)/auth/action";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { urls } from "@/lib/urls";
 
 const SignUpForm = () => {
   const form = useForm<T_SignUpSchema>({
@@ -39,7 +40,7 @@ const SignUpForm = () => {
     const res = await signUp(values);
 
     if (res?.success) {
-      router.push("/dashboard");
+      router.push(urls.HOME);
       toast.success(res.message);
     } else {
       toast.error(res?.message);

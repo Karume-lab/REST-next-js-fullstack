@@ -23,6 +23,7 @@ import { Button } from "../ui/button";
 import { signIn } from "@/app/(pages)/auth/action";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { urls } from "@/lib/urls";
 
 const SignInForm = () => {
   const form = useForm<T_SignInSchema>({
@@ -39,7 +40,7 @@ const SignInForm = () => {
     const res = await signIn(values);
 
     if (res.success) {
-      router.push("/");
+      router.push(urls.HOME);
       toast.success(res.message);
     } else {
       toast.error(res.message);

@@ -3,6 +3,7 @@ import { PrismaAdapter } from "@lucia-auth/adapter-prisma";
 import prisma from "./prisma";
 import { cookies } from "next/headers";
 import { cache } from "react";
+import { SITE_COOKIE_KEY } from "./constants";
 
 const adapter = new PrismaAdapter(prisma.session, prisma.user);
 
@@ -12,7 +13,7 @@ interface DatabaseUserAttributes {
 }
 export const lucia = new Lucia(adapter, {
   sessionCookie: {
-    name: "agri-gear-auth-cookie",
+    name: SITE_COOKIE_KEY,
     expires: false,
     attributes: {
       secure: process.env.NODE_ENV === "production",

@@ -3,6 +3,7 @@
 import { lucia } from "@/lib/lucia";
 import prisma from "@/lib/prisma";
 import { T_SignInSchema, T_SignUpSchema } from "@/lib/schemas";
+import { urls } from "@/lib/urls";
 import { error } from "console";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
@@ -89,5 +90,5 @@ export const signOut = async () => {
     sessionCookie.value,
     sessionCookie.attributes
   );
-  return redirect("/auth");
+  return redirect(urls.AUTH);
 };

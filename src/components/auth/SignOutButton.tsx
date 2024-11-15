@@ -8,7 +8,15 @@ interface SignOutProps {
 }
 
 const SignOut: React.FC<SignOutProps> = ({ children }) => {
-  return <Button onClick={signOut}>{children}</Button>;
+  return (
+    <Button
+      onClick={() => {
+        signOut();
+      }}
+    >
+      {children}
+    </Button>
+  );
 };
 
 export default SignOut;

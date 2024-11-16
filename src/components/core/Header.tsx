@@ -11,7 +11,7 @@ import {
   NavigationMenuViewport,
 } from "@/components/ui/navigation-menu";
 import { useTheme } from "next-themes";
-import { Monitor } from "lucide-react";
+import { Check, Monitor } from "lucide-react";
 import { Button } from "../ui/button";
 
 const Header = () => {
@@ -26,16 +26,19 @@ const Header = () => {
           <NavigationMenuContent>
             <ul>
               <li onClick={() => setTheme("system")}>
+                {theme === "system" && <Check size={5} />}
                 <Button>System</Button>
               </li>
             </ul>
             <ul>
               <li onClick={() => setTheme("dark")}>
+                {theme === "dark" && <Check size={5} />}
                 <Button>Dark</Button>
               </li>
             </ul>
             <ul>
               <li onClick={() => setTheme("light")}>
+                {theme === "light" && <Check size={5} />}
                 <Button>Light</Button>
               </li>
             </ul>

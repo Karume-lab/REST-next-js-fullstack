@@ -1,28 +1,49 @@
 "use client";
 import kyInstance from "@/lib/ky";
+import { TasksPage } from "@/lib/types";
 import { urls } from "@/lib/urls";
 import { Task } from "@prisma/client";
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
 import React from "react";
 
 const Tasks = () => {
-  const query = useQuery<Task[]>({
+  const {
+    data,
+    status,
+    fetchNextPage,
+    hasNextPage,
+    isFetching,
+    isFetchingNextPage,
+  } = useInfiniteQuery({
     queryKey: ["tasks"],
-    queryFn: kyInstance.get(urls.API_POSTS).json<Task[]>,
+    queryFn: ({ pageParam }) =>
+      kyInstance
+        .get(
+          urls.API_POSTS,
+          pageParam ? { searchParams: { cursor: pageParam } } : {}
+        )
+        .json<TasksPage>(),
+    initialPageParam: null as string | null,
+    getNextPageParam: (lastPage) => lastPage.nextCursor,
   });
 
-  if (query.status === "pending") {
+  if (status === "pending") {
     return <Loader2 className="mx-auto animate-spin" />;
   }
 
-  if (query.status === "error") {
-    return <p>An error occurred while loading posts.</p>;
+  if (status === "error") {
+    return <p>An error occurred while loading tasks.</p>;
   }
+
+  const tasks = data?.pages.flatMap((page) => page.tasks) || [];
+
   return (
     <div>
-      {query.data.map((data) => (
-        <TaskCard key={data.id} task={data} />
+      {tasks.map((task) => (
+        <>
+          <TaskCard key={task.id} task={task} />
+        </>
       ))}
     </div>
   );

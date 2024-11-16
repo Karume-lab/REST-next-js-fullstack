@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import {
   Card,
   CardContent,
@@ -24,6 +24,7 @@ import { signUp } from "@/app/(pages)/auth/action";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { urls } from "@/lib/urls";
+import LoadingButton from "../core/LoadingButton";
 
 const SignUpForm = () => {
   const form = useForm<T_SignUpSchema>({
@@ -35,8 +36,10 @@ const SignUpForm = () => {
     },
   });
   const router = useRouter();
+  const [isDisabled, setIsDisabled] = useState(false);
 
   const handleOnSubmit = async (values: T_SignUpSchema) => {
+    setIsDisabled(true);
     const res = await signUp(values);
 
     if (res?.success) {
@@ -45,12 +48,14 @@ const SignUpForm = () => {
     } else {
       toast.error(res?.message);
     }
+    setIsDisabled(false);
   };
+
   return (
     <Card>
       <CardHeader>
         <CardTitle>Begin your journey ...</CardTitle>
-        <CardDescription>Sign in to your account to continue.</CardDescription>
+        <CardDescription>Sign up to your account to continue.</CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -114,7 +119,12 @@ const SignUpForm = () => {
                 </FormItem>
               )}
             />
-            <Button type="submit">Sign up</Button>
+            <LoadingButton
+              type="submit"
+              disabled={isDisabled}
+              text="Sign up"
+              loadingText="Signing up"
+            />
           </form>
         </Form>
       </CardContent>

@@ -23,6 +23,7 @@ import {
 import { QUERY_KEYS } from "@/lib/constants";
 import { TasksPage } from "@/lib/types";
 import { toast } from "sonner";
+import LoadingButton from "../core/LoadingButton";
 
 const CreateTask = () => {
   const form = useForm<T_CreateTaskSchema>({
@@ -74,33 +75,31 @@ const CreateTask = () => {
   };
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleOnSubmit)}>
-        <FormField
-          control={form.control}
-          name="title"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Title</FormLabel>
-              <FormControl>
-                <Input placeholder="Enter your task title ..." {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <Button type="submit" disabled={mutation.isPending}>
-          {mutation.isPending ? (
-            <>
-              <Loader />
-              <span> Creating ...</span>
-            </>
-          ) : (
-            "Create"
-          )}
-        </Button>
-      </form>
-    </Form>
+    <>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(handleOnSubmit)}>
+          <FormField
+            control={form.control}
+            name="title"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Title</FormLabel>
+                <FormControl>
+                  <Input placeholder="Enter your task title ..." {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <LoadingButton
+            type="submit"
+            disabled={mutation.isPending}
+            text="Create"
+            loadingText="Creating"
+          />
+        </form>
+      </Form>
+    </>
   );
 };
 

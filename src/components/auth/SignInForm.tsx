@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import {
   Card,
   CardContent,
@@ -19,11 +19,11 @@ import {
   FormMessage,
 } from "../ui/form";
 import { Input } from "../ui/input";
-import { Button } from "../ui/button";
 import { signIn } from "@/app/(pages)/auth/action";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { urls } from "@/lib/urls";
+import LoadingButton from "../core/LoadingButton";
 
 const SignInForm = () => {
   const form = useForm<T_SignInSchema>({
@@ -35,8 +35,10 @@ const SignInForm = () => {
   });
 
   const router = useRouter();
+  const [isDisabled, setIsDisabled] = useState(false);
 
   const handleOnSubmit = async (values: T_SignInSchema) => {
+    setIsDisabled(true);
     const res = await signIn(values);
 
     if (res.success) {
@@ -45,6 +47,7 @@ const SignInForm = () => {
     } else {
       toast.error(res.message);
     }
+    setIsDisabled(false);
   };
 
   return (
@@ -94,7 +97,12 @@ const SignInForm = () => {
                 </FormItem>
               )}
             />
-            <Button type="submit">Sign in</Button>
+            <LoadingButton
+              type="submit"
+              disabled={isDisabled}
+              text="Sign in"
+              loadingText="Signing in"
+            />
           </form>
         </Form>
       </CardContent>

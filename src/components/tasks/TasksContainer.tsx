@@ -9,6 +9,7 @@ import InfiniteScrollContainer from "../core/InfiniteScrollContainer";
 import Loader from "../ui/Loader";
 import TasksContainerLoadingSkeleton from "./TasksContainerLoadingSkeleton";
 import { QUERY_KEYS } from "@/lib/constants";
+import DeleteTaskDialog from "./DeleteTaskDialog";
 
 const TasksContainer = () => {
   const {
@@ -23,7 +24,7 @@ const TasksContainer = () => {
     queryFn: ({ pageParam }) =>
       kyInstance
         .get(
-          urls.API_POSTS,
+          urls.API_TASKS,
           pageParam ? { searchParams: { cursor: pageParam } } : {}
         )
         .json<TasksPage>(),
@@ -63,6 +64,11 @@ const TasksContainer = () => {
 interface TaskProps {
   task: Task;
 }
-const TaskCard: React.FC<TaskProps> = ({ task }) => <div>{task.title}</div>;
+const TaskCard: React.FC<TaskProps> = ({ task }) => (
+  <div>
+    <DeleteTaskDialog task={task} />
+    {task.title}
+  </div>
+);
 
 export default TasksContainer;

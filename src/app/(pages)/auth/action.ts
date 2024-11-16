@@ -38,8 +38,7 @@ export const signUp = async (values: T_SignUpSchema) => {
       sessionCookie.attributes
     );
     return {
-      message:
-        "Account created successfully, kindly be patient as we redirect you",
+      message: "Account created successfully, kindly wait as we redirect you",
       success: true,
     };
   } catch (error) {
@@ -75,7 +74,7 @@ export const signIn = async (values: T_SignInSchema) => {
       sessionCookie.attributes
     );
     return {
-      message: "Login success, kindly be patient as we redirect you",
+      message: "Login success, kindly wait as we redirect you",
       success: true,
     };
   } catch (error) {

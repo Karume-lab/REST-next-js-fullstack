@@ -4,7 +4,10 @@ export const urls = {
   MARKET_PLACE: "/market-place",
   GOOGLE_REDIRECT_URI: "/api/auth/google/callback",
   GOOGLE_USER_INFO: "https://www.googleapis.com/oauth2/v1/userinfo",
-  API_POSTS: "/api/data/posts",
+  API_TASKS: "/api/data/tasks",
+  API_TASK: (taskId: string) => `/api/data/tasks/${taskId}`,
+  USER: (userId: string, profileId: string) =>
+    `/api/data/users/${userId}/profiles/${profileId}`,
 };
 
 export const publicPaths = new Set<string>([
@@ -13,7 +16,7 @@ export const publicPaths = new Set<string>([
   urls.LANDING_PAGE,
 ]);
 
-export const publicApiPaths = new Set<string>([urls.API_POSTS]);
+export const publicApiPaths = new Set<string>([urls.API_TASKS]);
 
 export function isPublicPath(path: string): boolean {
   if (publicPaths.has(path) || publicApiPaths.has(path)) return true;

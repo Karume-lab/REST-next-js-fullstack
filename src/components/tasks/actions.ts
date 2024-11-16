@@ -19,3 +19,23 @@ export const createTask = async (values: T_CreateTaskSchema) => {
   });
   return task;
 };
+
+export const deleteTask = async (taskId: string) => {
+  const task = await prisma.task.findUnique({
+    where: {
+      id: taskId,
+    },
+  });
+
+  if (!task) {
+    throw new Error("Post not found");
+  }
+
+  const deletedTask = await prisma.task.delete({
+    where: {
+      id: taskId,
+    },
+  });
+
+  return deletedTask;
+};

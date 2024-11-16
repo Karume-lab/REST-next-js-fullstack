@@ -6,6 +6,7 @@ import Header from "@/components/core/Header";
 import InfiniteScrollContainer from "@/components/core/InfiniteScrollContainer";
 import TasksContainer from "@/components/tasks/TasksContainer";
 import TasksContainerLoadingSkeleton from "@/components/tasks/TasksContainerLoadingSkeleton";
+import ActionConfirmationDialog from "@/components/core/ActionConfirmationDialog";
 import Loader from "./ui/Loader";
 
 export {
@@ -18,4 +19,5 @@ export {
   Loader,
   TasksContainer,
   TasksContainerLoadingSkeleton,
+  ActionConfirmationDialog,
 };

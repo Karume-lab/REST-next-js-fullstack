@@ -89,5 +89,5 @@ export const GET = async (req: NextRequest) => {
   } catch (error) {
     console.error(error);
   }
-  return redirect(urls.LANDING_PAGE);
+  return redirect(urls.MARKET_PLACE);
 };

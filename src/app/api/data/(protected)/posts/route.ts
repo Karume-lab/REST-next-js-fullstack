@@ -1,4 +1,4 @@
-import { pageSize } from "@/lib/constants";
+import { PAGE_SIZE } from "@/lib/constants";
 import { validateRequest } from "@/lib/lucia";
 import prisma from "@/lib/prisma";
 import { TasksPage } from "@/lib/types";
@@ -13,12 +13,12 @@ export const GET = async (req: NextRequest) => {
 
     const cursor = req.nextUrl.searchParams.get("cursor") || undefined;
     const tasks = await prisma.task.findMany({
-      take: pageSize + 1,
+      take: PAGE_SIZE + 1,
       cursor: cursor ? { id: cursor } : undefined,
     });
-    const nextCursor = tasks.length > pageSize ? tasks[pageSize].id : null;
+    const nextCursor = tasks.length > PAGE_SIZE ? tasks[PAGE_SIZE].id : null;
     const data: TasksPage = {
-      tasks: tasks.slice(0, pageSize),
+      tasks: tasks.slice(0, PAGE_SIZE),
       nextCursor,
     };
     return Response.json(data);

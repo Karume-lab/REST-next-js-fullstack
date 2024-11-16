@@ -12,9 +12,10 @@ export const createTask = async (values: T_CreateTaskSchema) => {
 
   const { title } = createTaskSchema.parse({ ...values });
 
-  await prisma.task.create({
+  const task = await prisma.task.create({
     data: {
       title,
     },
   });
+  return task;
 };

@@ -8,6 +8,7 @@ import React from "react";
 import InfiniteScrollContainer from "../core/InfiniteScrollContainer";
 import Loader from "../ui/Loader";
 import TasksContainerLoadingSkeleton from "./TasksContainerLoadingSkeleton";
+import { QUERY_KEYS } from "@/lib/constants";
 
 const TasksContainer = () => {
   const {
@@ -18,7 +19,7 @@ const TasksContainer = () => {
     isFetching,
     isFetchingNextPage,
   } = useInfiniteQuery({
-    queryKey: ["tasks"],
+    queryKey: [QUERY_KEYS.tasks],
     queryFn: ({ pageParam }) =>
       kyInstance
         .get(

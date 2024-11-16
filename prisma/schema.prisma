@@ -27,3 +27,8 @@ model Session {
 
   user User @relation(fields: [userId], references: [id])
 }
+
+model Task {
+  id    String @id @default(cuid())
+  title String
+}

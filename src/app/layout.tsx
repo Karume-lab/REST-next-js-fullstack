@@ -1,3 +1,4 @@
+import ReactQueryProvider from "@/providers/ReactQueryProvier";
 import "./../styles/globals.css";
 import { Fira_Sans } from "next/font/google";
 const firaSans = Fira_Sans({
@@ -12,7 +13,11 @@ const RootLayout = ({
 }>) => {
   return (
     <html lang="en" className={`${firaSans.className}`}>
-      <body>{children}</body>
+      <body>
+        <ReactQueryProvider>
+          {children}
+          </ReactQueryProvider>
+      </body>
     </html>
   );
 };

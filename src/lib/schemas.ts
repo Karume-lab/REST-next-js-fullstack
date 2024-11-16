@@ -17,3 +17,8 @@ export const signUpSchema = z
     path: ["confirmPassword"],
   });
 export type T_SignUpSchema = z.infer<typeof signUpSchema>;
+
+export const createTaskSchema = z.object({
+  title: z.string(),
+});
+export type T_CreateTaskSchema = z.infer<typeof createTaskSchema>;

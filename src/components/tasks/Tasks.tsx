@@ -3,9 +3,10 @@ import kyInstance from "@/lib/ky";
 import { TasksPage } from "@/lib/types";
 import { urls } from "@/lib/urls";
 import { Task } from "@prisma/client";
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
-import { Loader2 } from "lucide-react";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import React from "react";
+import InfiniteScrollContainer from "../core/InfiniteScrollContainer";
+import Loader from "../ui/Loader";
 
 const Tasks = () => {
   const {
@@ -29,7 +30,7 @@ const Tasks = () => {
   });
 
   if (status === "pending") {
-    return <Loader2 className="mx-auto animate-spin" />;
+    return <Loader />;
   }
 
   if (status === "error") {
@@ -39,13 +40,15 @@ const Tasks = () => {
   const tasks = data?.pages.flatMap((page) => page.tasks) || [];
 
   return (
-    <div>
+    <InfiniteScrollContainer
+      onBottomReached={() => hasNextPage && !isFetching && fetchNextPage()}
+    >
       {tasks.map((task) => (
-        <>
-          <TaskCard key={task.id} task={task} />
-        </>
+        <TaskCard key={task.id} task={task} />
       ))}
-    </div>
+
+      {isFetchingNextPage && <Loader className="my-4"  />}
+    </InfiniteScrollContainer>
   );
 };
 

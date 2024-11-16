@@ -1,4 +1,5 @@
 "use client";
+import kyInstance from "@/lib/ky";
 import { urls } from "@/lib/urls";
 import { Task } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
@@ -8,15 +9,7 @@ import React from "react";
 const Tasks = () => {
   const query = useQuery<Task[]>({
     queryKey: ["tasks"],
-    queryFn: async () => {
-      const res = await fetch(urls.API_POSTS);
-
-      if (!res.ok) {
-        throw Error(`Request faied with status code ${res.status}`);
-      }
-
-      return res.json();
-    },
+    queryFn: kyInstance.get(urls.API_POSTS).json<Task[]>,
   });
 
   if (query.status === "pending") {

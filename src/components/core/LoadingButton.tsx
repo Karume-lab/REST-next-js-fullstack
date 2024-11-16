@@ -1,36 +1,40 @@
 import React from "react";
-import { Button, ButtonProps } from "../ui/button";
-import Loader from "../ui/Loader";
+import { Button, ButtonProps } from "@/components/ui/button";
+import { Loader } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface LoadingButtonProps extends ButtonProps {
   text: string;
   loadingText: string;
+  isLoading?: boolean;
+  icon?: React.ReactNode;
 }
 
-const LoadingButton: React.FC<LoadingButtonProps> = ({
-  text,
-  disabled,
-  loadingText,
-  className,
-  type,
-  variant,
-}) => {
-  return (
-    <Button
-      variant={variant}
-      type={type}
-      disabled={disabled}
-      className={cn(
-        "flex items-center space-x-2 transition-all duration-300",
-        disabled ? "cursor-not-allowed" : "text-white",
-        className
-      )}
-    >
-      {disabled && <Loader />}
-      <span>{disabled ? `${loadingText} ...` : text}</span>
-    </Button>
-  );
-};
+const LoadingButton = React.forwardRef<HTMLButtonElement, LoadingButtonProps>(
+  (
+    { text, loadingText, isLoading, className, children, icon, ...props },
+    ref
+  ) => {
+    return (
+      <Button
+        ref={ref}
+        className={cn("flex items-center gap-2", className)}
+        disabled={isLoading}
+        {...props}
+      >
+        {isLoading ? (
+          <Loader className="h-4 w-4 animate-spin" />
+        ) : (
+          icon && <div className="h-4 w-4">{icon}</div>
+        )}
+        <div>
+          <span>{isLoading ? loadingText : text}</span>
+        </div>
+      </Button>
+    );
+  }
+);
+
+LoadingButton.displayName = "LoadingButton";
 
 export default LoadingButton;

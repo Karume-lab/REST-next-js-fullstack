@@ -65,8 +65,10 @@ interface TaskProps {
   task: Task;
 }
 const TaskCard: React.FC<TaskProps> = ({ task }) => (
-  <div>
-    <DeleteTaskDialog task={task} />
+  <div className="group/task">
+    <div className="opacity-0 transition-opacity duration-200 group-hover/task:opacity-100">
+      <DeleteTaskDialog task={task} />
+    </div>
     {task.title}
   </div>
 );

@@ -92,7 +92,6 @@ const CreateTask = () => {
             )}
           />
           <LoadingButton
-            type="submit"
             disabled={mutation.isPending}
             text="Create"
             loadingText="Creating"

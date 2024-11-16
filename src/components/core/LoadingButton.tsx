@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, ButtonProps } from "@/components/ui/button";
-import { Loader } from "lucide-react";
 import { cn } from "@/lib/utils";
+import Loader from "../ui/Loader";
 
 interface LoadingButtonProps extends ButtonProps {
   text: string;
@@ -12,24 +12,36 @@ interface LoadingButtonProps extends ButtonProps {
 
 const LoadingButton = React.forwardRef<HTMLButtonElement, LoadingButtonProps>(
   (
-    { text, loadingText, isLoading, className, children, icon, ...props },
+    {
+      text,
+      loadingText,
+      isLoading = false,
+      className,
+      children,
+      icon,
+      disabled,
+      ...props
+    },
     ref
   ) => {
     return (
       <Button
         ref={ref}
-        className={cn("flex items-center gap-2", className)}
         disabled={isLoading}
+        className={cn("flex items-center gap-2", className)}
         {...props}
       >
         {isLoading ? (
-          <Loader className="h-4 w-4 animate-spin" />
+          <>
+            <Loader className="h-4 w-4" />
+            <span>{loadingText}</span>
+          </>
         ) : (
-          icon && <div className="h-4 w-4">{icon}</div>
+          <>
+            {icon && <span className="mr-2">{icon}</span>}
+            <span>{text}</span>
+          </>
         )}
-        <div>
-          <span>{isLoading ? loadingText : text}</span>
-        </div>
       </Button>
     );
   }

@@ -4,6 +4,8 @@ import SignOutButton from "@/components/auth/SignOutButton";
 import ContinueWithGoogleButton from "@/components/auth/ContinueWithGoogleButton";
 import Header from "@/components/core/Header";
 import InfiniteScrollContainer from "@/components/core/InfiniteScrollContainer";
+import TasksContainer from "@/components/tasks/TasksContainer";
+import TasksContainerLoadingSkeleton from "@/components/tasks/TasksContainerLoadingSkeleton";
 import Loader from "./ui/Loader";
 
 export {
@@ -14,4 +16,6 @@ export {
   Header,
   InfiniteScrollContainer,
   Loader,
+  TasksContainer,
+  TasksContainerLoadingSkeleton,
 };

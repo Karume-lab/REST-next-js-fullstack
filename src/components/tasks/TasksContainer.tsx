@@ -7,8 +7,9 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import React from "react";
 import InfiniteScrollContainer from "../core/InfiniteScrollContainer";
 import Loader from "../ui/Loader";
+import TasksContainerLoadingSkeleton from "./TasksContainerLoadingSkeleton";
 
-const Tasks = () => {
+const TasksContainer = () => {
   const {
     data,
     status,
@@ -30,7 +31,7 @@ const Tasks = () => {
   });
 
   if (status === "pending") {
-    return <Loader />;
+    return <TasksContainerLoadingSkeleton />;
   }
 
   if (status === "error") {
@@ -38,6 +39,10 @@ const Tasks = () => {
   }
 
   const tasks = data?.pages.flatMap((page) => page.tasks) || [];
+
+  if (status === "success" && !tasks.length && !hasNextPage) {
+    return <p>No tasks</p>;
+  }
 
   return (
     <InfiniteScrollContainer
@@ -47,7 +52,9 @@ const Tasks = () => {
         <TaskCard key={task.id} task={task} />
       ))}
 
-      {isFetchingNextPage && <Loader className="my-4"  />}
+      {isFetchingNextPage && <Loader className="my-4" />}
+
+      {!hasNextPage && <p>You have reached the end</p>}
     </InfiniteScrollContainer>
   );
 };
@@ -55,8 +62,6 @@ const Tasks = () => {
 interface TaskProps {
   task: Task;
 }
-const TaskCard: React.FC<TaskProps> = ({ task }) => {
-  return <div>{task.title}</div>;
-};
+const TaskCard: React.FC<TaskProps> = ({ task }) => <div>{task.title}</div>;
 
-export default Tasks;
+export default TasksContainer;

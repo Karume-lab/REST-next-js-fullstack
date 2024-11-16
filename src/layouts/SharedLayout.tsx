@@ -6,7 +6,7 @@ interface SharedLayoutProps extends PropsWithChildren {
   className?: string;
 }
 
-export function SharedLayout({ children, className = "" }: SharedLayoutProps) {
+const SharedLayout = ({ children, className = "" }: SharedLayoutProps) => {
   return (
     <html lang="en">
       <body
@@ -16,4 +16,6 @@ export function SharedLayout({ children, className = "" }: SharedLayoutProps) {
       </body>
     </html>
   );
-}
+};
+
+export default SharedLayout;

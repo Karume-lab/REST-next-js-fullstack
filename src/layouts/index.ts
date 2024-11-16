@@ -1,3 +1,3 @@
-import { SharedLayout } from "./SharedLayout";
+import SharedLayout from "./SharedLayout";
 
 export { SharedLayout };

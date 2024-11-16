@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import {
   NavigationMenu,
@@ -9,15 +10,35 @@ import {
   NavigationMenuTrigger,
   NavigationMenuViewport,
 } from "@/components/ui/navigation-menu";
+import { useTheme } from "next-themes";
+import { Monitor } from "lucide-react";
+import { Button } from "../ui/button";
 
-const Header = async () => {
+const Header = () => {
+  const { theme, setTheme } = useTheme();
   return (
     <NavigationMenu>
       <NavigationMenuList>
         <NavigationMenuItem>
-          <NavigationMenuTrigger>Item One</NavigationMenuTrigger>
+          <NavigationMenuTrigger>
+            <Monitor />
+          </NavigationMenuTrigger>
           <NavigationMenuContent>
-            <NavigationMenuLink>Link</NavigationMenuLink>
+            <ul>
+              <li onClick={() => setTheme("system")}>
+                <Button>System</Button>
+              </li>
+            </ul>
+            <ul>
+              <li onClick={() => setTheme("dark")}>
+                <Button>Dark</Button>
+              </li>
+            </ul>
+            <ul>
+              <li onClick={() => setTheme("light")}>
+                <Button>Light</Button>
+              </li>
+            </ul>
           </NavigationMenuContent>
         </NavigationMenuItem>
         <NavigationMenuItem>

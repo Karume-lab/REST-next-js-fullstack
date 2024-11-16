@@ -1,8 +1,7 @@
 import { defaultMetadata } from "@/config/metadata";
-import ReactQueryProvider from "@/providers/ReactQueryProvier";
-import { Toaster } from "sonner";
 import "@/styles/globals.css";
-import { SharedLayout } from "@/layouts";
+import { geistSans, geistMono } from "@/config/fonts";
+import { BaseProviders } from "@/components";
 
 export const metadata = defaultMetadata;
 
@@ -12,11 +11,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <SharedLayout>
-      <ReactQueryProvider>
-        {children}
-        <Toaster richColors />
-      </ReactQueryProvider>
-    </SharedLayout>
+    <html lang="en" suppressHydrationWarning>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased`}
+        suppressHydrationWarning
+      >
+        <BaseProviders>{children}</BaseProviders>
+      </body>
+    </html>
   );
 }

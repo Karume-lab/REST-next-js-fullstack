@@ -4,6 +4,7 @@ import SignOutButton from "@/components/auth/SignOutButton";
 import ContinueWithGoogleButton from "@/components/auth/ContinueWithGoogleButton";
 import Header from "@/components/core/Header";
 import InfiniteScrollContainer from "@/components/core/InfiniteScrollContainer";
+import BaseProviders from "@/components/core/BaseProviders";
 import TasksContainer from "@/components/tasks/TasksContainer";
 import TasksContainerLoadingSkeleton from "@/components/tasks/TasksContainerLoadingSkeleton";
 import ActionConfirmationDialog from "@/components/core/ActionConfirmationDialog";
@@ -20,4 +21,5 @@ export {
   TasksContainer,
   TasksContainerLoadingSkeleton,
   ActionConfirmationDialog,
+  BaseProviders,
 };

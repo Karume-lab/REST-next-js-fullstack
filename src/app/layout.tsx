@@ -1,25 +1,22 @@
+import { defaultMetadata } from "@/config/metadata";
 import ReactQueryProvider from "@/providers/ReactQueryProvier";
-import "./../styles/globals.css";
-import { Fira_Sans } from "next/font/google";
-const firaSans = Fira_Sans({
-  weight: ["200", "400", "700"],
-  subsets: ["latin"],
-});
+import { Toaster } from "sonner";
+import "@/styles/globals.css";
+import { SharedLayout } from "@/layouts";
 
-const RootLayout = ({
+export const metadata = defaultMetadata;
+
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
-}>) => {
+}>) {
   return (
-    <html lang="en" className={`${firaSans.className}`}>
-      <body>
-        <ReactQueryProvider>
-          {children}
-          </ReactQueryProvider>
-      </body>
-    </html>
+    <SharedLayout>
+      <ReactQueryProvider>
+        {children}
+        <Toaster richColors />
+      </ReactQueryProvider>
+    </SharedLayout>
   );
-};
-
-export default RootLayout;
+}

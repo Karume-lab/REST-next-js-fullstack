@@ -9,7 +9,6 @@ import {
   NavigationMenuTrigger,
   NavigationMenuViewport,
 } from "@/components/ui/navigation-menu";
-import SignOut from "../auth/SignOutButton";
 
 const Header = async () => {
   return (

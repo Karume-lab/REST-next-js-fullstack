@@ -16,7 +16,7 @@ const BaseProviders: React.FC<BaseProvidersProps> = ({ children }) => {
     >
       <ReactQueryProvider>
         {children}
-        <Toaster />
+        <Toaster richColors />
       </ReactQueryProvider>
     </ThemeProvider>
   );

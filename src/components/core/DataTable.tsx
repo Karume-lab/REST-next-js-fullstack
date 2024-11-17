@@ -23,7 +23,6 @@ interface DataTableProps<T_Data, T_Value> {
   data: T_Data[];
   columns: ColumnDef<T_Data, T_Value>[];
   noun: string;
-  isLoading?: boolean;
   hasNextPage?: boolean;
   isFetching?: boolean;
 }
@@ -32,7 +31,6 @@ const DataTable = <T_Data, T_Value>({
   columns,
   data,
   noun,
-  isLoading,
   hasNextPage,
   isFetching,
 }: DataTableProps<T_Data, T_Value>) => {

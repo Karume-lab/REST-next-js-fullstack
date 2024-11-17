@@ -32,7 +32,6 @@ const TasksTable = () => {
       <FilterHeading />
       <DataTable
         data={data?.tasks || []}
-        isLoading={isLoading}
         isFetching={isFetching}
         hasNextPage={!!data?.nextCursor}
         columns={tasksColumns}

@@ -14,10 +14,14 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
-import Loader from "../ui/Loader";
-import { Button } from "../ui/button";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import LoadingButton from "./LoadingButton";
+import { Button } from "../ui/button";
+import {
+  ChevronLeft,
+  ChevronRight,
+  ChevronsLeft,
+  ChevronsRight,
+} from "lucide-react";
 
 interface DataTableProps<T_Data, T_Value> {
   data: T_Data[];
@@ -25,6 +29,11 @@ interface DataTableProps<T_Data, T_Value> {
   noun: string;
   hasNextPage?: boolean;
   isFetching?: boolean;
+  isLoadingMore?: boolean;
+  onLoadMore?: () => void;
+  currentPage: number;
+  totalPages: number;
+  onPageChange: (page: number) => void;
 }
 
 const DataTable = <T_Data, T_Value>({
@@ -33,46 +42,49 @@ const DataTable = <T_Data, T_Value>({
   noun,
   hasNextPage,
   isFetching,
+  isLoadingMore,
+  onLoadMore,
+  currentPage,
+  totalPages,
+  onPageChange,
 }: DataTableProps<T_Data, T_Value>) => {
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
 
-  const createQueryString = (params: Record<string, string | null>) => {
-    const newSearchParams = new URLSearchParams(searchParams.toString());
+  // Generate page numbers to display
+  const getPageNumbers = () => {
+    const delta = 2; // Number of pages to show before and after current page
+    const range: number[] = [];
+    const rangeWithDots: (number | string)[] = [];
+    let l: number;
 
-    Object.entries(params).forEach(([key, value]) => {
-      if (value === null) {
-        newSearchParams.delete(key);
-      } else {
-        newSearchParams.set(key, value);
+    for (let i = 1; i <= totalPages; i++) {
+      if (
+        i === 1 ||
+        i === totalPages ||
+        (i >= currentPage - delta && i <= currentPage + delta)
+      ) {
+        range.push(i);
       }
+    }
+
+    range.forEach((i) => {
+      if (l) {
+        if (i - l === 2) {
+          rangeWithDots.push(l + 1);
+        } else if (i - l !== 1) {
+          rangeWithDots.push("...");
+        }
+      }
+      rangeWithDots.push(i);
+      l = i;
     });
 
-    return newSearchParams.toString();
+    return rangeWithDots;
   };
-
-  const handleNextPage = () => {
-    const lastItem = data[data.length - 1] as any;
-    const cursor = lastItem?.id;
-    if (cursor) {
-      const queryString = createQueryString({ cursor });
-      router.push(`${pathname}?${queryString}`);
-    }
-  };
-
-  const handlePreviousPage = () => {
-    router.push(pathname);
-  };
-
-  const showingPreviousButton = searchParams.has("cursor");
-  const showingNextButton = hasNextPage;
 
   return (
     <div className="space-y-4">
@@ -122,24 +134,75 @@ const DataTable = <T_Data, T_Value>({
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-end space-x-2">
-        {showingPreviousButton && (
-          <LoadingButton
-            variant="outline"
-            size="sm"
-            onClick={handlePreviousPage}
-            isLoading={isFetching}
-            text="Previous"
-          />
-        )}
-        {showingNextButton && (
-          <LoadingButton
-            variant="outline"
-            size="sm"
-            onClick={handleNextPage}
-            isLoading={isFetching}
-            text="Next"
-          />
+
+      {/* Pagination Controls */}
+      <div className="flex items-center justify-between px-2">
+        <div className="flex items-center space-x-6 lg:space-x-8">
+          <div className="flex items-center space-x-2">
+            <p className="text-sm font-medium">
+              Page {currentPage} of {totalPages}
+            </p>
+          </div>
+          <div className="flex items-center space-x-2">
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => onPageChange(1)}
+              disabled={currentPage === 1 || isFetching}
+            >
+              <ChevronsLeft className="h-4 w-4" />
+            </Button>
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => onPageChange(currentPage - 1)}
+              disabled={currentPage === 1 || isFetching}
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+
+            <div className="flex items-center space-x-1">
+              {getPageNumbers().map((pageNum, index) =>
+                typeof pageNum === "number" ? (
+                  <Button
+                    key={index}
+                    variant={currentPage === pageNum ? "default" : "outline"}
+                    size="icon"
+                    onClick={() => onPageChange(pageNum)}
+                    disabled={isFetching}
+                    className="w-8 h-8"
+                  >
+                    {pageNum}
+                  </Button>
+                ) : (
+                  <span key={index} className="px-2">
+                    {pageNum}
+                  </span>
+                )
+              )}
+            </div>
+
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => onPageChange(currentPage + 1)}
+              disabled={!hasNextPage || isFetching}
+            >
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => onPageChange(totalPages)}
+              disabled={currentPage === totalPages || isFetching}
+            >
+              <ChevronsRight className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+
+        {isFetching && (
+          <div className="text-sm text-muted-foreground">Loading...</div>
         )}
       </div>
     </div>

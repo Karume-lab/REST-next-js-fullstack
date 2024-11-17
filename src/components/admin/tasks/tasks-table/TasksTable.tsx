@@ -2,27 +2,66 @@
 import kyInstance from "@/lib/ky";
 import { TasksPage } from "@/lib/types";
 import { urls } from "@/lib/urls";
-import { useQuery } from "@tanstack/react-query";
-import React from "react";
-import { QUERY_KEYS } from "@/lib/constants";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import React, { useState } from "react";
+import { PAGE_SIZE, QUERY_KEYS } from "@/lib/constants";
 import FilterHeading from "./FilterHeading";
 import DataTable from "@/components/core/DataTable";
 import { tasksColumns } from "./columns";
-import { useSearchParams } from "next/navigation";
 
 const TasksTable = () => {
-  const searchParams = useSearchParams();
-  const cursor = searchParams.get("cursor");
+  const [currentPage, setCurrentPage] = useState(1);
 
-  const { data, isFetching } = useQuery({
-    queryKey: [QUERY_KEYS.tasks, cursor],
-    queryFn: () =>
+  const {
+    data,
+    status,
+    fetchNextPage,
+    hasNextPage,
+    isFetching,
+    isFetchingNextPage,
+  } = useInfiniteQuery({
+    queryKey: [QUERY_KEYS.tasks],
+    queryFn: ({ pageParam }) =>
       kyInstance
-        .get(urls.API_TASKS, cursor ? { searchParams: { cursor } } : {})
+        .get(
+          urls.API_TASKS,
+          pageParam ? { searchParams: { cursor: pageParam } } : {}
+        )
         .json<TasksPage>(),
-    placeholderData: (previousData) => previousData,
-    staleTime: 5000,
+    initialPageParam: null as string | null,
+    getNextPageParam: (lastPage) => lastPage.nextCursor,
   });
+
+  const tasks = data?.pages.flatMap((page) => page.tasks) || [];
+  const totalItems = tasks.length + (hasNextPage ? PAGE_SIZE : 0);
+  const totalPages = Math.ceil(totalItems / PAGE_SIZE);
+
+  const handlePageChange = async (newPage: number) => {
+    const pagesNeeded =
+      Math.ceil((newPage * PAGE_SIZE) / PAGE_SIZE) - (data?.pages.length ?? 0);
+
+    if (pagesNeeded > 0 && hasNextPage) {
+      for (let i = 0; i < pagesNeeded && hasNextPage; i++) {
+        await fetchNextPage();
+      }
+    }
+
+    setCurrentPage(newPage);
+  };
+
+  const getCurrentPageData = () => {
+    const start = (currentPage - 1) * PAGE_SIZE;
+    const end = start + PAGE_SIZE;
+    return tasks.slice(start, end);
+  };
+
+  if (status === "pending") {
+    return <div>Loading...</div>;
+  }
+
+  if (status === "error") {
+    return <div>Error loading tasks</div>;
+  }
 
   return (
     <div className="space-y-4">
@@ -31,11 +70,16 @@ const TasksTable = () => {
       </div>
       <FilterHeading />
       <DataTable
-        data={data?.tasks || []}
-        isFetching={isFetching}
-        hasNextPage={!!data?.nextCursor}
+        data={getCurrentPageData()}
         columns={tasksColumns}
         noun="tasks"
+        hasNextPage={hasNextPage}
+        isFetching={isFetching}
+        isLoadingMore={isFetchingNextPage}
+        onLoadMore={fetchNextPage}
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={handlePageChange}
       />
     </div>
   );

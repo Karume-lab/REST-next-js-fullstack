@@ -42,7 +42,7 @@ export const GET = async (req: NextRequest) => {
       codeVerifier
     );
 
-    const oauthResponse = result as OAuthResponse; 
+    const oauthResponse = result as OAuthResponse;
     const accessToken = oauthResponse.data.access_token;
 
     if (!accessToken || typeof accessToken !== "string") {
@@ -89,5 +89,5 @@ export const GET = async (req: NextRequest) => {
   } catch (error) {
     console.error(error);
   }
-  return redirect(urls.MARKET_PLACE);
+  return redirect(urls.PUBLIC_TASKS);
 };

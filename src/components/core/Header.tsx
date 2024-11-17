@@ -13,6 +13,7 @@ import {
 import { useTheme } from "next-themes";
 import { Check, Monitor } from "lucide-react";
 import { Button } from "../ui/button";
+import SignUpToday from "../auth/SignUpToday";
 
 const Header = () => {
   const { theme, setTheme } = useTheme();
@@ -45,7 +46,9 @@ const Header = () => {
           </NavigationMenuContent>
         </NavigationMenuItem>
         <NavigationMenuItem>
-          <NavigationMenuLink>Sign in</NavigationMenuLink>
+          <NavigationMenuLink asChild>
+            <SignUpToday />
+          </NavigationMenuLink>
         </NavigationMenuItem>
       </NavigationMenuList>
     </NavigationMenu>

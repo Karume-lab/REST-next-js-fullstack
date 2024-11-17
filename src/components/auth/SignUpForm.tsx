@@ -18,7 +18,6 @@ import {
   FormMessage,
 } from "../ui/form";
 import { Input } from "../ui/input";
-import { Button } from "../ui/button";
 import { signUpSchema, T_SignUpSchema } from "@/lib/schemas";
 import { signUp } from "@/app/(pages)/auth/action";
 import { useRouter } from "next/navigation";
@@ -43,7 +42,7 @@ const SignUpForm = () => {
     const res = await signUp(values);
 
     if (res?.success) {
-      router.push(urls.MARKET_PLACE);
+      router.push(urls.PUBLIC_TASKS);
       toast.success(res.message);
     } else {
       toast.error(res?.message);

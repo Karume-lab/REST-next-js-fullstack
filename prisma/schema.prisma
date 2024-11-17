@@ -18,17 +18,26 @@ model User {
   email        String    @unique
   hashPassword String?
   session      Session[]
+  task         Task[]
 }
 
 model Session {
   id        String   @id @default(cuid())
   userId    String
   expiresAt DateTime
+  role      UserRole @default(USER)
 
   user User @relation(fields: [userId], references: [id])
 }
 
 model Task {
-  id    String @id @default(cuid())
-  title String
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title  String
+}
+
+enum UserRole {
+  ADMIN
+  USER
 }

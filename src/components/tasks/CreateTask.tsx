@@ -24,6 +24,8 @@ import { QUERY_KEYS } from "@/lib/constants";
 import { TasksPage } from "@/lib/types";
 import { toast } from "sonner";
 import LoadingButton from "../core/LoadingButton";
+import { urls } from "@/lib/urls";
+import { useRouter } from "next/navigation";
 
 const CreateTask = () => {
   const form = useForm<T_CreateTaskSchema>({
@@ -35,6 +37,8 @@ const CreateTask = () => {
 
   const queryClient = useQueryClient();
   const mutation = useCreateTaskMutation();
+
+  const router = useRouter();
   const handleOnSubmit = async (values: T_CreateTaskSchema) => {
     mutation.mutate(values, {
       onSuccess: async (newTask) => {
@@ -70,6 +74,7 @@ const CreateTask = () => {
         });
 
         toast.success("Task created successfully");
+        router.push(urls.PUBLIC_TASKS);
       },
     });
   };

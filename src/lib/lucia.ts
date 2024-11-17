@@ -4,12 +4,14 @@ import prisma from "./prisma";
 import { cookies } from "next/headers";
 import { cache } from "react";
 import { SITE_COOKIE_KEY } from "./constants";
+import { UserRole } from "@prisma/client";
 
 const adapter = new PrismaAdapter(prisma.session, prisma.user);
 
 interface DatabaseUserAttributes {
   id: string;
   email: string | null;
+  role: UserRole;
 }
 export const lucia = new Lucia(adapter, {
   sessionCookie: {
@@ -23,6 +25,7 @@ export const lucia = new Lucia(adapter, {
     return {
       id: databaseUserAttributes.id,
       email: databaseUserAttributes.email,
+      role: databaseUserAttributes.role,
     };
   },
 });

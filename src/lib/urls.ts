@@ -1,9 +1,10 @@
 export const urls = {
   AUTH: "/auth",
   LANDING_PAGE: "/",
-  MARKET_PLACE: "/market-place",
   GOOGLE_REDIRECT_URI: "/api/auth/google/callback",
   GOOGLE_USER_INFO: "https://www.googleapis.com/oauth2/v1/userinfo",
+  PUBLIC_TASKS: "/tasks",
+  PUBLIC_TASKS_NEW: "/tasks/new",
   API_TASKS: "/api/data/tasks",
   API_TASK: (taskId: string) => `/api/data/tasks/${taskId}`,
   USER: (userId: string, profileId: string) =>

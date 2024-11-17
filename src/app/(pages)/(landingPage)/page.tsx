@@ -1,13 +1,10 @@
-import { TasksContainer } from "@/components";
-import CreateTask from "@/components/tasks/CreateTask";
 import React from "react";
 
 const LandingPage = () => {
   return (
     <>
-      <div>Landing Page</div>
-      <CreateTask />
-      <TasksContainer />
+      Welcome to the template. There is boilerplate code for a simple, simple,
+      very simple task manager app.
     </>
   );
 };

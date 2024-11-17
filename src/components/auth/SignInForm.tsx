@@ -42,7 +42,7 @@ const SignInForm = () => {
     const res = await signIn(values);
 
     if (res.success) {
-      router.push(urls.MARKET_PLACE);
+      router.push(urls.PUBLIC_TASKS);
       toast.success(res.message);
     } else {
       toast.error(res.message);

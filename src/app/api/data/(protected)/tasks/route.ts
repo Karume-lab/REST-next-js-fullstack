@@ -6,13 +6,16 @@ import { NextRequest } from "next/server";
 
 export const GET = async (req: NextRequest) => {
   try {
-    // const { user } = await validateRequest();
-    // if (!user) {
-    //   return Response.json({ message: "Unauthorized" }, { status: 401 });
-    // }
+    const { user } = await validateRequest();
+    if (!user) {
+      return Response.json({ message: "Unauthorized" }, { status: 401 });
+    }
 
     const cursor = req.nextUrl.searchParams.get("cursor") || undefined;
     const tasks = await prisma.task.findMany({
+      where: {
+        userId: user.id,
+      },
       take: PAGE_SIZE + 1,
       cursor: cursor ? { id: cursor } : undefined,
     });

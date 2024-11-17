@@ -1,7 +1,9 @@
+import { SharedLayout } from "@/layouts";
+
 export default function AuthLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return <>{children}</>;
+  return <SharedLayout>{children}</SharedLayout>;
 }

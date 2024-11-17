@@ -14,7 +14,6 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
-import LoadingButton from "./LoadingButton";
 import { Button } from "../ui/button";
 import {
   ChevronLeft,
@@ -30,7 +29,6 @@ interface DataTableProps<T_Data, T_Value> {
   hasNextPage?: boolean;
   isFetching?: boolean;
   isLoadingMore?: boolean;
-  onLoadMore?: () => void;
   currentPage: number;
   totalPages: number;
   onPageChange: (page: number) => void;
@@ -42,8 +40,6 @@ const DataTable = <T_Data, T_Value>({
   noun,
   hasNextPage,
   isFetching,
-  isLoadingMore,
-  onLoadMore,
   currentPage,
   totalPages,
   onPageChange,
@@ -54,9 +50,8 @@ const DataTable = <T_Data, T_Value>({
     getCoreRowModel: getCoreRowModel(),
   });
 
-  // Generate page numbers to display
   const getPageNumbers = () => {
-    const delta = 2; // Number of pages to show before and after current page
+    const delta = 2; 
     const range: number[] = [];
     const rangeWithDots: (number | string)[] = [];
     let l: number;

@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import Loader from "../ui/Loader";
 
 interface LoadingButtonProps extends ButtonProps {
-  text: string;
+  text?: string;
   loadingText: string;
   isLoading?: boolean;
   icon?: React.ReactNode;

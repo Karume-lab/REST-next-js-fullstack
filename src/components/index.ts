@@ -7,7 +7,9 @@ import Header from "@/components/core/Header";
 import InfiniteScrollContainer from "@/components/core/InfiniteScrollContainer";
 import BaseProviders from "@/components/core/BaseProviders";
 import TasksContainer from "@/components/tasks/TasksContainer";
+import CreateEditTask from "@/components/tasks/CreateEditTask";
 import TasksContainerLoadingSkeleton from "@/components/tasks/TasksContainerLoadingSkeleton";
+import TaskActionsDropdown from "@/components/tasks/TaskActionsDropdown";
 import ActionConfirmationDialog from "@/components/core/ActionConfirmationDialog";
 import Loader from "./ui/Loader";
 
@@ -23,5 +25,7 @@ export {
   TasksContainerLoadingSkeleton,
   ActionConfirmationDialog,
   BaseProviders,
+  CreateEditTask,
   SignUpToday,
+  TaskActionsDropdown,
 };

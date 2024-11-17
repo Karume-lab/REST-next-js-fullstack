@@ -26,8 +26,12 @@ import { toast } from "sonner";
 import LoadingButton from "../core/LoadingButton";
 import { urls } from "@/lib/urls";
 import { useRouter } from "next/navigation";
+import { Task } from "@prisma/client";
 
-const CreateTask = () => {
+interface CreateEditTaskProps {
+  task?: Task;
+}
+const CreateEditTask: React.FC<CreateEditTaskProps> = ({ task }) => {
   const form = useForm<T_CreateTaskSchema>({
     resolver: zodResolver(createTaskSchema),
     defaultValues: {
@@ -107,4 +111,4 @@ const CreateTask = () => {
   );
 };
 
-export default CreateTask;
+export default CreateEditTask;

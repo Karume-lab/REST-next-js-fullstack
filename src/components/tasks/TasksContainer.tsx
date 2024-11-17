@@ -9,7 +9,7 @@ import InfiniteScrollContainer from "../core/InfiniteScrollContainer";
 import Loader from "../ui/Loader";
 import TasksContainerLoadingSkeleton from "./TasksContainerLoadingSkeleton";
 import { QUERY_KEYS } from "@/lib/constants";
-import DeleteTaskDialog from "./DeleteTaskDialog";
+import TaskActionsDropdown from "./TaskActionsDropdown";
 
 const TasksContainer = () => {
   const {
@@ -67,7 +67,7 @@ interface TaskProps {
 const TaskCard: React.FC<TaskProps> = ({ task }) => (
   <div className="group/task">
     <div className="opacity-0 transition-opacity duration-200 group-hover/task:opacity-100">
-      <DeleteTaskDialog task={task} />
+      <TaskActionsDropdown taskId={task.id} />
     </div>
     {task.title}
   </div>

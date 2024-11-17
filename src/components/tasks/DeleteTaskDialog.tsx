@@ -1,22 +1,20 @@
 "use client";
-
-import { Task } from "@prisma/client";
 import React, { useState } from "react";
 import { useDeleteTaskMutation } from "./mutations";
 import LoadingButton from "../core/LoadingButton";
 import ActionConfirmationDialog from "../core/ActionConfirmationDialog";
-import { Trash2 } from "lucide-react";
+import { Trash } from "lucide-react";
 
 interface DeleteTaskDialogProps {
-  task: Task;
+  taskId: string;
 }
 
-const DeleteTaskDialog: React.FC<DeleteTaskDialogProps> = ({ task }) => {
+const DeleteTaskDialog: React.FC<DeleteTaskDialogProps> = ({ taskId }) => {
   const mutation = useDeleteTaskMutation();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const handleOnConfirm = () => {
-    mutation.mutate(task.id, {
+    mutation.mutate(taskId, {
       onSuccess: () => {
         setIsDialogOpen(false);
       },
@@ -35,9 +33,9 @@ const DeleteTaskDialog: React.FC<DeleteTaskDialogProps> = ({ task }) => {
       confirmVerb="deletion"
       triggerElement={
         <LoadingButton
-          variant="destructive"
-          text="Delete"
-          icon={<Trash2 />}
+          variant="ghost"
+          className="hover:bg-red-700"
+          icon={<Trash />}
           loadingText="Deleting"
           onClick={() => setIsDialogOpen(true)}
         />

@@ -9,6 +9,7 @@ import Header from "@/components/core/Header";
 import InfiniteScrollContainer from "@/components/core/InfiniteScrollContainer";
 import ActionConfirmationDialog from "@/components/core/ActionConfirmationDialog";
 import BaseProviders from "@/components/core/BaseProviders";
+import DataTable from "@/components/core/DataTable";
 // tasks
 import TasksContainer from "@/components/tasks/TasksContainer";
 import CreateEditTask from "@/components/tasks/CreateEditTask";
@@ -31,6 +32,7 @@ export {
   InfiniteScrollContainer,
   ActionConfirmationDialog,
   BaseProviders,
+  DataTable,
   // tasks
   TasksContainer,
   CreateEditTask,

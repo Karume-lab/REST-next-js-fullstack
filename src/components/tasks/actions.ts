@@ -24,8 +24,7 @@ export const createTask = async (values: T_CreateTaskSchema) => {
 
 export const deleteTask = async (taskId: string) => {
   const { user } = await validateRequest();
-
-  if (!user || isAdminOrOwner(user, taskId)) {
+  if (!user || !isAdminOrOwner(user, taskId)) {
     throw Error("Unauthorized");
   }
 

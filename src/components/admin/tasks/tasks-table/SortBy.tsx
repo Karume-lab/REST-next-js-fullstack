@@ -32,7 +32,7 @@ const sortByOptions = [
 ];
 
 const SortBy = () => {
-  const [sortBy, setSortBy] = useState("");
+  const [sortBy, setSortBy] = useState("createdAt");
 
   return (
     <DropdownMenu>

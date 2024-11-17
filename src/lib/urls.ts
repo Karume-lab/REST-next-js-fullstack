@@ -16,6 +16,8 @@ export const urls = {
     `/api/data/users/${userId}/profiles/${profileId}`,
   // admin
   PUBLIC_ADMIN: "/admin",
+  PUBLIC_ADMIN_MANAGE: "/admin/manage",
+  PUBLIC_ADMIN_MANAGE_TASKS: "/admin/manage/tasks",
   API_ADMIN: "/api/data/admin",
 };
 

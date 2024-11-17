@@ -22,3 +22,9 @@ export const createTaskSchema = z.object({
   title: z.string(),
 });
 export type T_CreateTaskSchema = z.infer<typeof createTaskSchema>;
+
+export const filterSchema = z.object({
+  title: z.string().optional(),
+  email: z.string().optional(),
+});
+export type T_FilterSchema = z.infer<typeof filterSchema>;

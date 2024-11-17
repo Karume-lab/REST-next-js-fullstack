@@ -12,18 +12,26 @@ export const GET = async (req: NextRequest) => {
     }
 
     const cursor = req.nextUrl.searchParams.get("cursor") || undefined;
+    const searchQuery = req.nextUrl.searchParams.get("q") || "";
+
     const tasks = await prisma.task.findMany({
       where: {
         userId: user.id,
+        ...(searchQuery && {
+          OR: [{ title: { contains: searchQuery, mode: "insensitive" } }],
+        }),
       },
       take: PAGE_SIZE + 1,
-      cursor: cursor ? { id: cursor } : undefined,
+      ...(cursor && { cursor: { id: cursor }, skip: 1 }),
     });
+
     const nextCursor = tasks.length > PAGE_SIZE ? tasks[PAGE_SIZE].id : null;
+
     const data: TasksPage = {
       tasks: tasks.slice(0, PAGE_SIZE),
       nextCursor,
     };
+
     return Response.json(data);
   } catch (error) {
     console.error(error);

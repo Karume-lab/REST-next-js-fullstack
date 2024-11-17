@@ -14,7 +14,7 @@ const TasksTable = () => {
   const searchParams = useSearchParams();
   const cursor = searchParams.get("cursor");
 
-  const { data, isLoading, isFetching } = useQuery({
+  const { data, isFetching } = useQuery({
     queryKey: [QUERY_KEYS.tasks, cursor],
     queryFn: () =>
       kyInstance

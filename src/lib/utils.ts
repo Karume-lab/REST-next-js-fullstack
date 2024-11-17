@@ -1,4 +1,4 @@
-import { Task, UserRole } from "@prisma/client";
+import { UserRole } from "@prisma/client";
 import { clsx, type ClassValue } from "clsx";
 import { User } from "lucia";
 import { cache } from "react";

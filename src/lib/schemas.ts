@@ -9,8 +9,8 @@ export type T_SignInSchema = z.infer<typeof signInSchema>;
 export const signUpSchema = z
   .object({
     email: z.string().email(),
-    password: z.string().min(8),
-    confirmPassword: z.string().min(8),
+    password: z.string(),
+    confirmPassword: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords do no match",

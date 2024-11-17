@@ -1,7 +1,7 @@
 import { Header } from "@/components";
 import { SharedLayout } from "@/layouts";
 
-export default function RootLayout({
+export default function LandingLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;

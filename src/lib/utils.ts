@@ -4,6 +4,7 @@ import { User } from "lucia";
 import { cache } from "react";
 import { twMerge } from "tailwind-merge";
 import prisma from "./prisma";
+import { notFound } from "next/navigation";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -19,6 +20,10 @@ export const getTask = cache(async (taskId: string) => {
       id: taskId,
     },
   });
+
+  if (!task) {
+    notFound();
+  }
 
   return task;
 });

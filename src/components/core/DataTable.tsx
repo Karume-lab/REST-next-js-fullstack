@@ -1,11 +1,15 @@
 "use client";
 import {
   ColumnDef,
+  ColumnFiltersState,
   flexRender,
   getCoreRowModel,
+  getFilteredRowModel,
+  getSortedRowModel,
+  SortingState,
   useReactTable,
 } from "@tanstack/react-table";
-import React from "react";
+import React, { useState } from "react";
 import {
   Table,
   TableBody,
@@ -44,14 +48,26 @@ const DataTable = <T_Data, T_Value>({
   totalPages,
   onPageChange,
 }: DataTableProps<T_Data, T_Value>) => {
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+
+    onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
+    state: {
+      sorting,
+      columnFilters,
+    },
   });
 
   const getPageNumbers = () => {
-    const delta = 2; 
+    const delta = 2;
     const range: number[] = [];
     const rangeWithDots: (number | string)[] = [];
     let l: number;

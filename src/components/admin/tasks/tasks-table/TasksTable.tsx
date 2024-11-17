@@ -76,7 +76,6 @@ const TasksTable = () => {
         hasNextPage={hasNextPage}
         isFetching={isFetching}
         isLoadingMore={isFetchingNextPage}
-        onLoadMore={fetchNextPage}
         currentPage={currentPage}
         totalPages={totalPages}
         onPageChange={handlePageChange}

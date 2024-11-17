@@ -18,7 +18,6 @@ const FiltersForm = () => {
     resolver: zodResolver(filterSchema),
     defaultValues: {
       title: "",
-      email: "",
     },
   });
 
@@ -37,27 +36,6 @@ const FiltersForm = () => {
               <FormLabel>Title</FormLabel>
               <FormControl>
                 <Input placeholder="Enter your title ..." {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Email</FormLabel>
-              <FormControl>
-                <Input
-                  type="email"
-                  placeholder="Enter your Email ..."
-                  {...field}
-                  onChange={(e) => {
-                    e.target.value = e.target.value.trim();
-                    field.onChange(e);
-                  }}
-                />
               </FormControl>
               <FormMessage />
             </FormItem>

@@ -25,6 +25,7 @@ import {
   ChevronsLeft,
   ChevronsRight,
 } from "lucide-react";
+import { Input } from "../ui/input";
 
 interface DataTableProps<T_Data, T_Value> {
   data: T_Data[];
@@ -99,6 +100,13 @@ const DataTable = <T_Data, T_Value>({
 
   return (
     <div className="space-y-4">
+      <Input
+        placeholder="Filter title"
+        value={(table.getColumn("title")?.getFilterValue() as string) || ""}
+        onChange={(e) => {
+          table.getColumn("title")?.setFilterValue(e.target.value);
+        }}
+      />
       <div className="rounded-md border">
         <Table>
           <TableHeader>

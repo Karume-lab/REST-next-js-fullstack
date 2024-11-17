@@ -5,7 +5,7 @@ import Loader from "../ui/Loader";
 
 interface LoadingButtonProps extends ButtonProps {
   text?: string;
-  loadingText: string;
+  loadingText?: string;
   isLoading?: boolean;
   icon?: React.ReactNode;
 }
@@ -14,7 +14,7 @@ const LoadingButton = React.forwardRef<HTMLButtonElement, LoadingButtonProps>(
   (
     {
       text,
-      loadingText,
+      loadingText = "Loading",
       isLoading = false,
       className,
       children,

@@ -2,35 +2,27 @@
 import kyInstance from "@/lib/ky";
 import { TasksPage } from "@/lib/types";
 import { urls } from "@/lib/urls";
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import { QUERY_KEYS } from "@/lib/constants";
 import FilterHeading from "./FilterHeading";
 import DataTable from "@/components/core/DataTable";
 import { tasksColumns } from "./columns";
+import { useSearchParams } from "next/navigation";
 
 const TasksTable = () => {
-  const {
-    data,
-    status,
-    fetchNextPage,
-    hasNextPage,
-    isFetching,
-    isFetchingNextPage,
-  } = useInfiniteQuery({
-    queryKey: [QUERY_KEYS.tasks],
-    queryFn: ({ pageParam }) =>
-      kyInstance
-        .get(
-          urls.API_TASKS,
-          pageParam ? { searchParams: { cursor: pageParam } } : {}
-        )
-        .json<TasksPage>(),
-    initialPageParam: null as string | null,
-    getNextPageParam: (lastPage) => lastPage.nextCursor,
-  });
+  const searchParams = useSearchParams();
+  const cursor = searchParams.get("cursor");
 
-  const tasks = data?.pages.flatMap((page) => page.tasks) || [];
+  const { data, isLoading, isFetching } = useQuery({
+    queryKey: [QUERY_KEYS.tasks, cursor],
+    queryFn: () =>
+      kyInstance
+        .get(urls.API_TASKS, cursor ? { searchParams: { cursor } } : {})
+        .json<TasksPage>(),
+    placeholderData: (previousData) => previousData,
+    staleTime: 5000,
+  });
 
   return (
     <div className="space-y-4">
@@ -39,8 +31,10 @@ const TasksTable = () => {
       </div>
       <FilterHeading />
       <DataTable
-        data={tasks}
-        isLoading={isFetching}
+        data={data?.tasks || []}
+        isLoading={isLoading}
+        isFetching={isFetching}
+        hasNextPage={!!data?.nextCursor}
         columns={tasksColumns}
         noun="tasks"
       />

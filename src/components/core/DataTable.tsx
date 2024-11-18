@@ -55,6 +55,7 @@ export function DataTable<TData, TValue>({
   isLoadingMore,
   totalPages,
   onPageChange,
+  filterComponent,
 }: Omit<DataTableProps<TData, TValue>, "searchableColumns">) {
   const {
     sorting,
@@ -226,7 +227,9 @@ export function DataTable<TData, TValue>({
               variant="outline"
               size="icon"
               onClick={() => onPageChange(currentPage + 1)}
-              disabled={!hasNextPage || isFetching || isLoadingMore}
+              disabled={
+                currentPage === totalPages || isFetching || isLoadingMore
+              }
             >
               <ChevronRight className="h-4 w-4" />
             </Button>

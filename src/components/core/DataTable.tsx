@@ -26,6 +26,7 @@ import {
   ChevronsRight,
 } from "lucide-react";
 import { Input } from "../ui/input";
+import FilterHeading from "../admin/tasks/tasks-table/FilterHeading";
 
 interface DataTableProps<T_Data, T_Value> {
   data: T_Data[];
@@ -107,6 +108,7 @@ const DataTable = <T_Data, T_Value>({
           table.getColumn("title")?.setFilterValue(e.target.value);
         }}
       />
+      {/* <FilterHeading /> */}
       <div className="rounded-md border">
         <Table>
           <TableHeader>

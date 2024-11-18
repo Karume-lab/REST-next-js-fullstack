@@ -38,7 +38,7 @@ const TasksTable = () => {
 
   const handlePageChange = async (newPage: number) => {
     const pagesNeeded =
-      Math.ceil((newPage * PAGE_SIZE) / PAGE_SIZE) - (data?.pages.length ?? 0);
+      Math.ceil((newPage * PAGE_SIZE) / PAGE_SIZE) - (data?.pages.length!);
 
     if (pagesNeeded > 0 && hasNextPage) {
       for (let i = 0; i < pagesNeeded && hasNextPage; i++) {

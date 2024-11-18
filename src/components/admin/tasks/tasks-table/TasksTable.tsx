@@ -8,17 +8,12 @@ import { PAGE_SIZE, QUERY_KEYS } from "@/lib/constants";
 import FilterHeading from "./FilterHeading";
 import { DataTable } from "@/components/core/DataTable";
 import { tasksColumns } from "./columns";
-import { TasksTableProvider } from "@/providers/TasksTableProvider";
-import { SortingState, ColumnFiltersState } from "@tanstack/react-table";
 import { DataTableProvider } from "@/providers/DataTableProvider";
 
 type Task = { id: string; title: string; userId: string };
 
 const TasksTable = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [sorting, setSorting] = useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  const [globalFilter, setGlobalFilter] = useState("");
 
   const {
     data,
@@ -74,13 +69,6 @@ const TasksTable = () => {
     { key: "id", label: "ID" },
   ];
 
-  const filterComponent = (
-    <div className="flex flex-wrap gap-2">
-      {/* Additional custom filters can go here */}
-      <FilterHeading />
-    </div>
-  );
-
   if (status === "pending") {
     return <div>Loading...</div>;
   }
@@ -101,7 +89,7 @@ const TasksTable = () => {
         currentPage={currentPage}
         totalPages={totalPages}
         onPageChange={handlePageChange}
-        filterComponent={filterComponent}
+        filterComponent={<FilterHeading />}
       />
     </DataTableProvider>
   );

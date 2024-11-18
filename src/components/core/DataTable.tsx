@@ -55,7 +55,6 @@ export function DataTable<TData, TValue>({
   isLoadingMore,
   totalPages,
   onPageChange,
-  filterComponent,
 }: Omit<DataTableProps<TData, TValue>, "searchableColumns">) {
   const {
     sorting,

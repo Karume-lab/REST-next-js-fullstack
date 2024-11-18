@@ -1,15 +1,13 @@
 "use client";
 import {
   ColumnDef,
-  ColumnFiltersState,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
   getSortedRowModel,
-  SortingState,
   useReactTable,
 } from "@tanstack/react-table";
-import React, { useState } from "react";
+import React from "react";
 import {
   Table,
   TableBody,
@@ -25,7 +23,6 @@ import {
   ChevronsLeft,
   ChevronsRight,
 } from "lucide-react";
-import { Input } from "@/components/ui/input";
 import FilterHeading from "../admin/tasks/tasks-table/FilterHeading";
 import { useDataTable } from "@/providers/DataTableProvider";
 
@@ -66,7 +63,6 @@ export function DataTable<TData, TValue>({
     columnFilters,
     setColumnFilters,
     globalFilter,
-    setGlobalFilter,
     searchableColumns,
   } = useDataTable<TData>();
 

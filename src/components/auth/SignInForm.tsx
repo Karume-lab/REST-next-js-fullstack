@@ -24,6 +24,8 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { urls } from "@/lib/urls";
 import LoadingButton from "../core/LoadingButton";
+import Link from "next/link";
+import { Button } from "../ui/button";
 
 const SignInForm = () => {
   const form = useForm<T_SignInSchema>({
@@ -103,6 +105,9 @@ const SignInForm = () => {
               text="Sign in"
               loadingText="Signing in"
             />
+            <Button variant={"link"} asChild>
+              <Link href={urls.RESET_PASSWORD}>Forgot your password? Reset it here.</Link>
+            </Button>
           </form>
         </Form>
       </CardContent>

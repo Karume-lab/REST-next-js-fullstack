@@ -2,9 +2,13 @@ export const urls = {
   // landing page
   LANDING_PAGE: "/",
   //auth
-  AUTH: "/auth",
   GOOGLE_REDIRECT_URI: "/api/auth/google/callback",
   GOOGLE_USER_INFO: "https://www.googleapis.com/oauth2/v1/userinfo",
+  AUTH: "/auth",
+  RESET_PASSWORD: "/auth/reset-password",
+  RESET_PASSWORD_TOKEN: (token: string) => `/auth/reset-password/${token}`,
+  FULL_RESET_PASSWORD_TOKEN: (token: string) =>
+    `${process.env.NEXT_PUBLIC_URL}/auth/reset-password/${token}`,
   //tasks
   PUBLIC_TASKS: "/tasks",
   PUBLIC_TASKS_VIEW_EDIT: (taskId: string) => `/tasks/${taskId}`,

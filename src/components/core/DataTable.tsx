@@ -17,20 +17,26 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "../ui/table";
-import { Button } from "../ui/button";
+} from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
 import {
   ChevronLeft,
   ChevronRight,
   ChevronsLeft,
   ChevronsRight,
 } from "lucide-react";
-import { Input } from "../ui/input";
+import { Input } from "@/components/ui/input";
 import FilterHeading from "../admin/tasks/tasks-table/FilterHeading";
+import { useDataTable } from "@/providers/DataTableProvider";
 
-interface DataTableProps<T_Data, T_Value> {
-  data: T_Data[];
-  columns: ColumnDef<T_Data, T_Value>[];
+interface SearchableColumn<TData> {
+  key: keyof TData;
+  label: string;
+}
+
+interface DataTableProps<TData, TValue> {
+  data: TData[];
+  columns: ColumnDef<TData, TValue>[];
   noun: string;
   hasNextPage?: boolean;
   isFetching?: boolean;
@@ -38,20 +44,31 @@ interface DataTableProps<T_Data, T_Value> {
   currentPage: number;
   totalPages: number;
   onPageChange: (page: number) => void;
+  searchableColumns?: SearchableColumn<TData>[];
+  filterComponent?: React.ReactNode;
 }
 
-const DataTable = <T_Data, T_Value>({
+export function DataTable<TData, TValue>({
   columns,
   data,
   noun,
   hasNextPage,
   isFetching,
   currentPage,
+  isLoadingMore,
   totalPages,
   onPageChange,
-}: DataTableProps<T_Data, T_Value>) => {
-  const [sorting, setSorting] = useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  filterComponent,
+}: Omit<DataTableProps<TData, TValue>, "searchableColumns">) {
+  const {
+    sorting,
+    setSorting,
+    columnFilters,
+    setColumnFilters,
+    globalFilter,
+    setGlobalFilter,
+    searchableColumns,
+  } = useDataTable<TData>();
 
   const table = useReactTable({
     data,
@@ -59,12 +76,26 @@ const DataTable = <T_Data, T_Value>({
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
-
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     state: {
       sorting,
       columnFilters,
+      globalFilter,
+    },
+    filterFns: {
+      custom: (row, columnId, filterValue) => {
+        const value = String(row.getValue(columnId)).toLowerCase();
+        return value.includes(String(filterValue).toLowerCase());
+      },
+    },
+    globalFilterFn: (row, columnId, filterValue) => {
+      if (!searchableColumns) return true;
+      const searchValue = String(filterValue).toLowerCase();
+      return searchableColumns.some((column) => {
+        const value = String(row.getValue(column.key as string)).toLowerCase();
+        return value.includes(searchValue);
+      });
     },
   });
 
@@ -101,14 +132,7 @@ const DataTable = <T_Data, T_Value>({
 
   return (
     <div className="space-y-4">
-      <Input
-        placeholder="Filter title"
-        value={(table.getColumn("title")?.getFilterValue() as string) || ""}
-        onChange={(e) => {
-          table.getColumn("title")?.setFilterValue(e.target.value);
-        }}
-      />
-      {/* <FilterHeading /> */}
+      <FilterHeading />
       <div className="rounded-md border">
         <Table>
           <TableHeader>
@@ -207,7 +231,7 @@ const DataTable = <T_Data, T_Value>({
               variant="outline"
               size="icon"
               onClick={() => onPageChange(currentPage + 1)}
-              disabled={!hasNextPage || isFetching}
+              disabled={!hasNextPage || isFetching || isLoadingMore}
             >
               <ChevronRight className="h-4 w-4" />
             </Button>
@@ -215,19 +239,19 @@ const DataTable = <T_Data, T_Value>({
               variant="outline"
               size="icon"
               onClick={() => onPageChange(totalPages)}
-              disabled={currentPage === totalPages || isFetching}
+              disabled={
+                currentPage === totalPages || isFetching || isLoadingMore
+              }
             >
               <ChevronsRight className="h-4 w-4" />
             </Button>
           </div>
         </div>
 
-        {isFetching && (
+        {(isFetching || isLoadingMore) && (
           <div className="text-sm text-muted-foreground">Loading...</div>
         )}
       </div>
     </div>
   );
-};
-
-export default DataTable;
+}

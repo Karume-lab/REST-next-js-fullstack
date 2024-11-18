@@ -6,11 +6,19 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
 import { PAGE_SIZE, QUERY_KEYS } from "@/lib/constants";
 import FilterHeading from "./FilterHeading";
-import DataTable from "@/components/core/DataTable";
+import { DataTable } from "@/components/core/DataTable";
 import { tasksColumns } from "./columns";
+import { TasksTableProvider } from "@/providers/TasksTableProvider";
+import { SortingState, ColumnFiltersState } from "@tanstack/react-table";
+import { DataTableProvider } from "@/providers/DataTableProvider";
+
+type Task = { id: string; title: string; userId: string };
 
 const TasksTable = () => {
   const [currentPage, setCurrentPage] = useState(1);
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [globalFilter, setGlobalFilter] = useState("");
 
   const {
     data,
@@ -38,7 +46,7 @@ const TasksTable = () => {
 
   const handlePageChange = async (newPage: number) => {
     const pagesNeeded =
-      Math.ceil((newPage * PAGE_SIZE) / PAGE_SIZE) - (data?.pages.length!);
+      Math.ceil((newPage * PAGE_SIZE) / PAGE_SIZE) - data?.pages.length!;
 
     if (pagesNeeded > 0 && hasNextPage) {
       for (let i = 0; i < pagesNeeded && hasNextPage; i++) {
@@ -55,6 +63,24 @@ const TasksTable = () => {
     return tasks.slice(start, end);
   };
 
+  type SearchableColumn<T> = {
+    key: keyof T;
+    label: string;
+  };
+
+  const searchableColumns: SearchableColumn<Task>[] = [
+    { key: "title", label: "Title" },
+    { key: "userId", label: "User ID" },
+    { key: "id", label: "ID" },
+  ];
+
+  const filterComponent = (
+    <div className="flex flex-wrap gap-2">
+      {/* Additional custom filters can go here */}
+      <FilterHeading />
+    </div>
+  );
+
   if (status === "pending") {
     return <div>Loading...</div>;
   }
@@ -64,11 +90,7 @@ const TasksTable = () => {
   }
 
   return (
-    <div className="space-y-4">
-      <div className="flex flex-col w-full">
-        <h2 className="text-2xl font-bold">Tasks Table</h2>
-      </div>
-      <FilterHeading />
+    <DataTableProvider searchableColumns={searchableColumns}>
       <DataTable
         data={getCurrentPageData()}
         columns={tasksColumns}
@@ -79,8 +101,9 @@ const TasksTable = () => {
         currentPage={currentPage}
         totalPages={totalPages}
         onPageChange={handlePageChange}
+        filterComponent={filterComponent}
       />
-    </div>
+    </DataTableProvider>
   );
 };
 

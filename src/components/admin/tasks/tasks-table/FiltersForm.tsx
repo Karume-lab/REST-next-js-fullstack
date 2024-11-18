@@ -13,7 +13,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
 import { useForm } from "react-hook-form";
 
-const FiltersForm = () => {
+interface FiltersFormProps {
+  onSubmit: (values: T_FilterSchema) => void;
+}
+
+const FiltersForm: React.FC<FiltersFormProps> = ({ onSubmit }) => {
   const form = useForm<T_FilterSchema>({
     resolver: zodResolver(filterSchema),
     defaultValues: {
@@ -21,13 +25,9 @@ const FiltersForm = () => {
     },
   });
 
-  const handleOnSubmit = (values: T_FilterSchema) => {
-    console.log(values);
-  };
-
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleOnSubmit)} id="filter-form">
+      <form onSubmit={form.handleSubmit(onSubmit)} id="filter-form">
         <FormField
           control={form.control}
           name="title"
